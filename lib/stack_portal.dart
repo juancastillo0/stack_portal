@@ -1,7 +1,7 @@
 library stack_portal;
 
 export 'flutter_utils.dart';
-export 'portal/custom_overlay.dart';
-export 'portal/global_stack.dart';
-export 'portal/portal_utils.dart';
-export 'portal/portal_wrapper.dart';
+export 'src/custom_overlay.dart';
+export 'src/global_stack.dart';
+export 'src/portal_utils.dart';
+export 'src/portal_wrapper.dart';
