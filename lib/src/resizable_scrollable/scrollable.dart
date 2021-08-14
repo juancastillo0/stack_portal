@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:snippet_generator/main.dart';
-import 'package:snippet_generator/utils/extensions.dart';
+import '../../flutter_utils.dart';
 
 const _iconSize = 20.0;
 const _scrollIconPadding = EdgeInsets.all(0);
@@ -40,10 +39,10 @@ class MultiScrollController {
     );
   }
 
-  Rect? get globalPaintBounds => _context.globalPaintBounds;
+  Rect? get bounds => globalPaintBounds(_context);
 
   Offset toCanvasOffset(Offset offset) {
-    final _canvasOffset = offset + offset - globalPaintBounds!.topLeft;
+    final _canvasOffset = offset + offset - bounds!.topLeft;
     return _canvasOffset / scale;
   }
 
@@ -59,8 +58,7 @@ class MultiScrollController {
 
     if (delta.dy != 0) {
       final vp = vertical.position;
-      final dy =
-          (vertical.offset - delta.dy).clamp(0.0, vp.maxScrollExtent);
+      final dy = (vertical.offset - delta.dy).clamp(0.0, vp.maxScrollExtent);
       vertical.jumpTo(dy);
     }
   }
@@ -159,12 +157,14 @@ class MultiScrollable extends StatefulWidget {
     this.builder,
     Key? key,
     this.controller,
+    this.routeObserver,
   }) : super(key: key);
   final Widget Function(
     BuildContext context,
     MultiScrollController controller,
   )? builder;
   final MultiScrollController? controller;
+  final RouteObserver? routeObserver;
 
   @override
   _MultiScrollableState createState() => _MultiScrollableState();
@@ -174,6 +174,7 @@ class _MultiScrollableState extends State<MultiScrollable> with RouteAware {
   late final MultiScrollController controller;
   double? innerWidth;
   double? innerHeight;
+  RouteObserver? _routeObserver;
 
   @override
   void initState() {
@@ -218,7 +219,8 @@ class _MultiScrollableState extends State<MultiScrollable> with RouteAware {
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, box) {
-                    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+                    SchedulerBinding.instance!
+                        .addPostFrameCallback((timeStamp) {
                       if (innerWidth != box.maxWidth ||
                           innerHeight != box.maxHeight) {
                         setState(() {
@@ -251,13 +253,14 @@ class _MultiScrollableState extends State<MultiScrollable> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)!);
+    _routeObserver = widget.routeObserver;
+    _routeObserver?.subscribe(this, ModalRoute.of(context)!);
   }
 
   @override
   void dispose() {
     controller.dispose();
-    routeObserver.unsubscribe(this);
+    _routeObserver?.unsubscribe(this);
     super.dispose();
   }
 

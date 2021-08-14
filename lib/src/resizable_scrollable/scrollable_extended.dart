@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:snippet_generator/widgets/resizable_scrollable/scrollable.dart';
+import 'scrollable.dart';
 
 class CustomScrollGestures extends HookWidget {
   const CustomScrollGestures({
