@@ -7,6 +7,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../flutter_utils.dart';
 
+export 'scrollable_extended.dart';
+
 const _iconSize = 20.0;
 const _scrollIconPadding = EdgeInsets.zero;
 

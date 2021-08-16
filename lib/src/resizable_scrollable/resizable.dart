@@ -5,6 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'models/initial_size.dart';
 
+export 'models/initial_size.dart';
+
 enum ResizeHorizontal { left, right, both }
 enum ResizeVertical { top, bottom, both }
 
