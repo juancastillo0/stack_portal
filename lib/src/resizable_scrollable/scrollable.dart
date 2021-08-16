@@ -8,7 +8,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../flutter_utils.dart';
 
 const _iconSize = 20.0;
-const _scrollIconPadding = EdgeInsets.all(0);
+const _scrollIconPadding = EdgeInsets.zero;
 
 class MultiScrollController {
   MultiScrollController({
@@ -418,13 +418,13 @@ class MultiScrollbar extends HookWidget {
   final bool horizontal;
 
   @override
-  Widget build(BuildContext ctx) {
+  Widget build(BuildContext context) {
     final position = controller.position;
     final offset = controller.offset;
     final scrollExtent = position.maxScrollExtent + position.viewportDimension;
 
     return LayoutBuilder(
-      builder: (ctx, box) {
+      builder: (context, box) {
         final maxSize = horizontal ? box.maxWidth : box.maxHeight;
         final handleSize = maxSize * position.viewportDimension / scrollExtent;
         final rate = (maxSize - handleSize) / position.maxScrollExtent;

@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'models/initial_size.dart';
 
 enum ResizeHorizontal { left, right, both }
@@ -22,17 +23,18 @@ class Resizable extends StatefulWidget {
   final void Function(Size)? onResize;
 
   const Resizable({
-    this.handle,
+    Key? key,
     this.horizontal,
     this.defaultWidth,
-    required this.child,
     this.minWidth,
     this.vertical,
     this.defaultHeight,
     this.minHeight,
     this.flex,
+    required this.child,
+    this.handle,
     this.onResize,
-  });
+  }) : super(key: key);
 
   @override
   _ResizableState createState() => _ResizableState();
@@ -238,11 +240,12 @@ class ResizableItem {
 
 class Separator extends StatelessWidget {
   const Separator({
+    Key? key,
     this.size = 14,
+    this.thickness = 1,
     this.color = Colors.black12,
     this.vertical = false,
-    this.thickness = 1,
-  });
+  }) : super(key: key);
 
   final double size;
   final double thickness;
@@ -250,7 +253,7 @@ class Separator extends StatelessWidget {
   final bool vertical;
 
   @override
-  Widget build(BuildContext ctx) {
+  Widget build(BuildContext context) {
     final margin = (size - thickness) / 2;
 
     if (vertical) {

@@ -15,12 +15,12 @@ class CustomScrollGestures extends HookWidget {
   final bool allowDrag;
 
   @override
-  Widget build(BuildContext ctx) {
-    final prevPoint = useState(const Offset(0, 0));
+  Widget build(BuildContext context) {
+    final prevPoint = useState(Offset.zero);
     final initScale = useState(controller.scale);
 
     return LayoutBuilder(
-      builder: (ctx, box) {
+      builder: (context, box) {
         void onScaleUpdate(ScaleUpdateDetails d) {
           if (d.scale != 1) {
             // print(

@@ -31,6 +31,7 @@ typedef PortalBundler = Widget Function({
   required bool show,
 });
 
+@immutable
 class PortalParams {
   final void Function()? onTapOutside;
   final Color? backgroundColor;
