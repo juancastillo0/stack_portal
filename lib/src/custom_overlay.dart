@@ -93,8 +93,43 @@ class CustomOverlayButton extends HookWidget {
     return CustomOverlay(
       show: show.value,
       portal: portalBuilder(_portalNotifier),
-      onTapOutside: toggle,
+      params: params,
       child: _inner,
+    );
+  }
+}
+
+class StackOverlay extends HookWidget {
+  final Widget Function(BuildContext) portalBuilder;
+  final Widget child;
+  final PortalParams params;
+  final bool show;
+
+  const StackOverlay({
+    required this.portalBuilder,
+    required this.child,
+    required this.show,
+    this.params = const PortalParams(),
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _portalKey = useMemoized(() => GlobalKey());
+    final _childKey = useMemoized(() => GlobalKey());
+
+    return StackPortal(
+      show: show,
+      portal: makePositioned(
+        portalBuilder: portalBuilder,
+        childKey: _childKey,
+        portalKey: _portalKey,
+        params: params,
+      ),
+      child: KeyedSubtree(
+        key: _childKey,
+        child: child,
+      ),
     );
   }
 }
@@ -103,15 +138,13 @@ class CustomOverlay extends HookWidget {
   final bool show;
   final Widget portal;
   final Widget child;
-  final void Function()? onTapOutside;
-  final Color? backgroundColor;
+  final PortalParams params;
 
   const CustomOverlay({
     required this.show,
     required this.portal,
     required this.child,
-    this.onTapOutside,
-    this.backgroundColor,
+    this.params = const PortalParams(),
     Key? key,
   }) : super(key: key);
 
@@ -130,13 +163,10 @@ class CustomOverlay extends HookWidget {
           childKey: _keyChild,
           portalKey: _keyPortal,
           portalBuilder: (context) => _portalRef.widget,
-          params: PortalParams(
-            backgroundColor: backgroundColor,
-            onTapOutside: onTapOutside,
-          ),
+          params: params,
         ),
       ),
-      [onTapOutside, backgroundColor],
+      [params],
     );
 
     void _tryRebuildEntry() {
